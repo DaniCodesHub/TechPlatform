@@ -6,7 +6,6 @@ on:
 
 jobs:
 
-  # Backend: Java 25 + Maven + JUnit
   backend:
     name: Build Backend - ${{ matrix.service }}
     runs-on: ubuntu-latest
@@ -21,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Java 25
         uses: actions/setup-java@v5
@@ -37,14 +36,13 @@ jobs:
           JWT_SECRET: "TechPlatformCIOnlyJwtSecretKeyForTesting2026"
         run: mvn -B clean verify
 
-  # Frontend: Angular 22 + Node.js 24
   frontend:
     name: Build Frontend
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Node.js 24
         uses: actions/setup-node@v5
