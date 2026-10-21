@@ -1,0 +1,37 @@
+<app-navbar></app-navbar>
+<div class="products-container">
+
+  <div class="products-header">
+    <div>
+      <h1>Productos</h1>
+      <p>Gestión de productos y stock</p>
+    </div>
+  </div>
+
+  <div class="products-card">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Stock</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (product of products; track product.id) {
+          <tr>
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.stock }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>

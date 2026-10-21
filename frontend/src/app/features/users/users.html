@@ -1,0 +1,35 @@
+<app-navbar></app-navbar>
+<div class="users-container">
+
+  <div class="users-header">
+    <div>
+      <h1>Usuarios</h1>
+      <p>Gestión de usuarios de TechPlatform</p>
+    </div>
+  </div>
+
+  <div class="users-card">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Rol</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (user of users; track user.id) {
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>

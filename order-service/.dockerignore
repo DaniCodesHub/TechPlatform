@@ -1,0 +1,7 @@
+.git
+.settings
+.project
+.classpath
+.idea
+.vscode
+*.log

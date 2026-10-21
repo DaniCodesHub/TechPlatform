@@ -1,0 +1,37 @@
+<app-navbar></app-navbar>
+<div class="orders-container">
+
+  <div class="orders-header">
+    <div>
+      <h1>Pedidos</h1>
+      <p>Gestión y seguimiento de pedidos</p>
+    </div>
+  </div>
+
+  <div class="orders-card">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Estado</th>
+          <th>Total</th>
+          <th>Productos</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (order of orders; track order.id) {
+          <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.date }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.total }}</td>
+            <td>{{ order.items.length }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+</div>
