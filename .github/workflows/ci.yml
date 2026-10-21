@@ -33,6 +33,8 @@ jobs:
 
       - name: Build and test
         working-directory: ${{ matrix.service }}
+        env:
+          JWT_SECRET: "TechPlatformCIOnlyJwtSecretKeyForTesting2026"
         run: mvn -B clean verify
 
   # Frontend: Angular 22 + Node.js 24
