@@ -7,7 +7,7 @@ import { Product } from '../../models/product';
 export class ProductService {
 
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8080/api/products';
+  private readonly apiUrl = '/api/products';
 
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);
