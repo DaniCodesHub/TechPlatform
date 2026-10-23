@@ -4,7 +4,7 @@ All notable changes to TechPlatform will be documented in this file.
 
 This project follows [Semantic Versioning](https://semver.org/).
 
-## [1.0.0] - 2026-10-22
+## [1.0.0] - 2026-10-23
 
 ### Added
 
