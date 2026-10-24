@@ -65,18 +65,21 @@ The complete environment consists of eight Docker services: four backend compone
 ## Features
 
 ### Authentication and User Management
+
 - User authentication using JSON Web Tokens (JWT).
 - Role-based access control.
 - Protected API endpoints.
 - User management through the Angular interface.
 
 ### Product Management
+
 - Product catalog management.
 - Product creation, retrieval, updating, and deletion (CRUD).
 - Inventory and stock management.
 - Product operations through REST APIs.
 
 ### Order Management
+
 - Order creation and retrieval.
 - Order items associated with products.
 - Product availability and stock validation.
@@ -85,6 +88,7 @@ The complete environment consists of eight Docker services: four backend compone
 - Communication with Product Service using WebClient.
 
 ### Frontend
+
 - Angular single-page application (SPA).
 - Authentication and protected routes.
 - HTTP interceptor for JWT authentication.
@@ -92,6 +96,7 @@ The complete environment consists of eight Docker services: four backend compone
 - Integration with backend services through the API Gateway.
 
 ### API Documentation
+
 - Interactive Swagger UI.
 - OpenAPI documentation for Product, Order, and User services.
 - JWT authentication support in Swagger UI.
@@ -101,27 +106,22 @@ The complete environment consists of eight Docker services: four backend compone
 ### Prerequisites
 
 - Git
-- Docker Desktop or Docker Engine with Docker Compose
-- Sufficient system resources to run eight containers, including Microsoft SQL Server 2022
+- Docker Desktop with Docker Compose
+- Java 25 JDK
+- Maven or Maven Wrapper
+- Windows PowerShell
+- Sufficient system resources to run eight Docker containers, including Microsoft SQL Server 2022
 
 ### 1. Clone the repository
 
-```bash
+```powershell
 git clone https://github.com/DaniCodesHub/TechPlatform.git
 cd TechPlatform
 ```
 
 ### 2. Configure environment variables
 
-Create a `.env` file from the provided template.
-
-**Linux / macOS:**
-
-```bash
-cp .env.example .env
-```
-
-**Windows (PowerShell):**
+Create a `.env` file from the provided template:
 
 ```powershell
 Copy-Item .env.example .env
@@ -129,70 +129,38 @@ Copy-Item .env.example .env
 
 Edit `.env` and configure the following variables:
 
-- `DB_PASSWORD`: Strong SQL Server administrator password that meets SQL Server password complexity requirements.
+- `DB_PASSWORD`: Strong SQL Server administrator password meeting SQL Server password complexity requirements.
 - `MONGO_PASSWORD`: MongoDB administrator password.
 - `MONGODB_URI`: MongoDB connection string using the configured MongoDB password.
 - `JWT_SECRET`: Strong secret key of at least 32 bytes for signing and validating JWT tokens.
 
 Ensure that the password embedded in `MONGODB_URI` matches `MONGO_PASSWORD` and is URL-encoded if it contains special characters.
 
-**Security:** Never commit `.env` or real credentials to version control.
+**Security:** Never commit `.env` or private credentials to version control.
 
-### 3. Start the infrastructure
+### 3. Initialize and start TechPlatform
 
-Start SQL Server, MongoDB, and Apache Kafka:
+Make sure Docker Desktop is running. No TechPlatform containers need to be started manually.
 
-```bash
-docker compose up -d sqlserver mongodb kafka
-```
-
-Wait until SQL Server is ready to accept connections before proceeding.
-
-### 4. Initialize SQL Server databases
-
-The initialization script located at `scripts/init-databases.sql` creates the required databases if they do not already exist.
-
-**Linux / macOS (Bash):**
-
-```bash
-docker exec -i techplatform-sqlserver /opt/mssql-tools18/bin/sqlcmd \
-  -S localhost -U sa -P "$DB_PASSWORD" -No -C -b \
-  < scripts/init-databases.sql
-```
-
-Load `DB_PASSWORD` from `.env` into your shell before running this command.
-
-**Windows (PowerShell):**
+From the repository root, execute:
 
 ```powershell
-$env:DB_PASSWORD = (Get-Content .env | Where-Object { $_ -match '^DB_PASSWORD=' } | Select-Object -First 1) -replace '^DB_PASSWORD=', ''
-
-Get-Content .\scripts\init-databases.sql -Raw | docker exec -i techplatform-sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$env:DB_PASSWORD" -No -C -b
+.\setup.ps1
 ```
 
-The script initializes three databases:
+The automated setup script:
 
-- `product_db` — Product Service
-- `order_db` — Order Service
-- `user_db` — User Service
+- Starts Microsoft SQL Server and waits until it is ready.
+- Creates the `product_db`, `order_db`, and `user_db` databases if they do not already exist.
+- Compiles the four Java backend modules.
+- Builds and starts all eight Docker containers.
+- Waits for Hibernate to initialize the users table.
+- Creates the demonstration administrator account if it does not already exist.
+- Assigns the `ADMIN` role to the demonstration account.
 
-Database tables are managed by the corresponding backend services through their persistence configuration.
+The script can be executed multiple times without deleting existing database data or creating duplicate administrator accounts.
 
-### 5. Build and start the application
-
-```bash
-docker compose up -d --build
-```
-
-Docker Compose builds the application images and starts all eight services.
-
-Check container status:
-
-```bash
-docker compose ps
-```
-
-### 6. Access the application
+### 4. Access the application
 
 | Component | URL |
 |---|---|
@@ -202,19 +170,29 @@ docker compose ps
 
 The frontend communicates with the backend services through the API Gateway.
 
-### 7. Stop the application
+**Demo administrator credentials:**
 
-```bash
+- **Email:** `user@techplatform.com`
+- **Password:** `1234`
+- **Role:** `ADMIN`
+
+These credentials are intended exclusively for the local demonstration environment.
+
+### 5. Stop and restart the application
+
+To stop the application:
+
+```powershell
 docker compose down
 ```
 
-This stops and removes the containers while preserving persistent Docker volumes.
+To restart the existing application:
 
-To restart the application:
-
-```bash
+```powershell
 docker compose up -d
 ```
+
+Docker volumes preserve database data between restarts.
 
 **Note:** Avoid running `docker compose down -v` unless you intentionally want to delete the persistent database volumes and their data.
 
